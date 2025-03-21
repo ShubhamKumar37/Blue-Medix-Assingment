@@ -4,14 +4,13 @@ import { auth, isAdmin } from "../middleware/auth.middleware.js";
 
 const route = Router();
 
-route.get("/", auth, getAllUsers);
-route.get("/:id", auth, getSingleUser);
-route.delete("/:id", auth, deleteUser);
-route.put("/:id", auth, updateUser);
+route.get("/", auth, getAllUsers); // Working
+route.get("/:id", auth, getSingleUser); // Working
+route.delete("/:id", auth, deleteUser); // Working
+route.put("/:id", auth, updateUser); // Working
 
 // For admin only
-route.get("/admin/:id", auth, isAdmin, getSingleUser);
-route.delete("/admin/:id", auth, isAdmin, deleteUser);
-route.put("/admin/:id", auth, isAdmin, updateUser);
+route.delete("/admin/:id", auth, isAdmin, deleteUser); // Working
+route.put("/admin/:id", auth, isAdmin, updateUser); // Working
 
 export { route as userRoute };

@@ -6,7 +6,7 @@ const getAllUsers = asyncFun(async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const users = await User.find({}).skip(skip).limit(limit);
+    const users = await User.find({}).skip(skip).limit(limit).select("-password");
     return res.status(200).json(new ResponseHandler(200, "All users", users));
 });
 
@@ -22,11 +22,11 @@ const getSingleUser = asyncFun(async (req, res) => {
 const deleteUser = asyncFun(async (req, res) => {
     const { id } = req.params;
     const { role, _id } = req.user;
-
+    console.log("This is the role = ", role);   
     if (role !== "isAdmin") {
         const isUserYou = await User.findById(id);
         if (!isUserYou) throw new ErrorHandler(404, "User does not exist", []);
-        if (isUserYou._id.equals(_id)) throw new ErrorHandler(401, "You are not allowed to delete someone else account");
+        if (!isUserYou._id.equals(_id)) throw new ErrorHandler(401, "You are not allowed to delete someone else account");
     }
     const userExist = await User.findByIdAndDelete(id);
     if (!userExist) throw new ErrorHandler(404, "User does not exist", []);
@@ -44,7 +44,7 @@ const updateUser = asyncFun(async (req, res) => {
     if (role !== "isAdmin") {
         const isUserYou = await User.findById(id);
         if (!isUserYou) throw new ErrorHandler(404, "User does not exist", []);
-        if (isUserYou._id.equals(_id)) throw new ErrorHandler(401, "You are not allowed to delete someone else account");
+        if (!isUserYou._id.equals(_id)) throw new ErrorHandler(401, "You are not allowed to update someone else account");
     }
 
     const userExist = await User.findByIdAndUpdate(id, { name }, { new: true }).select("-password");

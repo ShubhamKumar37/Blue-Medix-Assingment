@@ -4,6 +4,8 @@ import { auth } from "../middleware/auth.middleware.js";
 
 const route = Router();
 
+// Working
+
 route.post("/", registerUser);
 route.put("/", loginUser);
 route.post("/logout", logoutUser);

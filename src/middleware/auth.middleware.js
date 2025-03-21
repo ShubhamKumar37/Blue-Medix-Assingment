@@ -10,6 +10,7 @@ const auth = asyncFun(async (req, _, next) => {
     if (!decodedData) throw new ErrorHandler(403, "Your are not authorized please try login again ", []);
 
     req.user = decodedData;
+    console.log("this is token info ", req.user);
     next();
 });
 
